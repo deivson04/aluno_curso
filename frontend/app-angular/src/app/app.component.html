@@ -1,17 +1,64 @@
-<h2>Formulário de Contato</h2>
+<main>
+  <h1>Gerenciamento de Alunos</h1>
 
-<form (ngSubmit)="enviarFormulario()">
-  <label for="nome">Nome:</label>
-  <input id="nome" [(ngModel)]="nome" name="nome" required />
+  <section>
+    <h2>{{ alunoParaEditar ? 'Editar Aluno' : 'Cadastrar Novo Aluno' }}</h2>
+    <form (ngSubmit)="salvarAluno()">
+      <div>
+        <label for="alunoNome">Nome:</label>
+        <input type="text" id="alunoNome" [(ngModel)]="nome" name="alunoNome" required>
+      </div>
+      <div>
+        <label for="alunoEmail">Email:</label>
+        <input type="email" id="alunoEmail" [(ngModel)]="email" name="alunoEmail" required>
+      </div>
+      <button type="submit">{{ alunoParaEditar ? 'Salvar Edição' : 'Cadastrar' }}</button>
+      <button type="button" (click)="limparFormulario()" *ngIf="alunoParaEditar">Cancelar Edição</button>
+    </form>
+    <p *ngIf="apiMessage" [ngStyle]="{'color': apiMessage.includes('Erro') ? 'red' : 'green'}">{{ apiMessage }}</p>
+  </section>
 
-  <br /><br />
+  <hr>
 
-  <label for="email">Email:</label>
-  <input id="email" [(ngModel)]="email" name="email" required type="email" />
+  <section>
+    <h2>Lista de Alunos da API</h2>
 
-  <br /><br />
+    <div *ngIf="loading">Carregando alunos...</div>
 
-  <button type="submit">Enviar</button>
-</form>
+    <div *ngIf="errorMessage" style="color: red;">
+      <p>{{ errorMessage }}</p>
+      <p>Verifique o console do navegador (F12) para detalhes do erro.</p>
+    </div>
 
-<p *ngIf="mensagem">{{ mensagem }}</p>
+    <ul *ngIf="!loading && !errorMessage && alunos.length > 0">
+      <li *ngFor="let aluno of alunos">
+        ID: {{ aluno.id }} - Nome: {{ aluno.nome }} - Email: {{ aluno.email }}
+        <button (click)="editarAluno(aluno)">Editar</button>
+        <button (click)="removerAluno(aluno.id)">Remover</button>
+      </li>
+    </ul>
+
+    <div *ngIf="!loading && !errorMessage && alunos.length === 0">
+      Nenhum aluno encontrado na API.
+    </div>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>Formulário Local (Exemplo Antigo)</h2>
+    <form (ngSubmit)="enviarFormulario()">
+      <div>
+        <label for="nomeLocal">Nome:</label>
+        <input type="text" id="nomeLocal" [(ngModel)]="nome" name="nomeLocal" required>
+      </div>
+      <div>
+        <label for="emailLocal">Email:</label>
+        <input type="email" id="emailLocal" [(ngModel)]="email" name="emailLocal" required>
+      </div>
+      <button type="submit">Enviar Local</button>
+    </form>
+    <p>{{ mensagem }}</p>
+  </section>
+
+</main>
