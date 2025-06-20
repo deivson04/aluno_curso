@@ -19,7 +19,7 @@ export class AlunoService {
   }
 
   getAluno(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/aluno/visualizar{id}`);
+    return this.http.get(`${this.apiUrl}/aluno/visualizar${id}`);
   }
 
   atualizarAluno(id: number, aluno: any): Observable<any> {
